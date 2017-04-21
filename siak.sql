@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 21, 2017 at 05:31 PM
+-- Generation Time: Apr 21, 2017 at 06:00 PM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -53,6 +53,14 @@ CREATE TABLE `matakuliah` (
   `sks` int(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `matakuliah`
+--
+
+INSERT INTO `matakuliah` (`kode_mk`, `nama_mk`, `sks`) VALUES
+(2, 'Algoritma & Struktur Data II', 3),
+(3, 'Pemrograman Java II', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -81,6 +89,15 @@ ALTER TABLE `mahasiswa`
 ALTER TABLE `matakuliah`
   ADD PRIMARY KEY (`kode_mk`);
 
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `matakuliah`
+--
+ALTER TABLE `matakuliah`
+  MODIFY `kode_mk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
