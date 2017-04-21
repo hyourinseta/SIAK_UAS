@@ -67,6 +67,7 @@ public class NilaiDao {
     
     public Nilai delete(Nilai nilai) throws SQLException {
         deleteStatement.setInt(1, nilai.getNim());
+        deleteStatement.setInt(2, nilai.getKode_mk());
         deleteStatement.executeUpdate();
         return nilai;
     }

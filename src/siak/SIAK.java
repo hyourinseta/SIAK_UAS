@@ -374,17 +374,31 @@ public class SIAK {
                     }
                     break;
                 case 5:
-                    System.out.print("Masukkan NIM : ");
-                    String npm_d = in.nextLine();
-                    Mahasiswa mhs_d = service.getMahasiswa(Integer.parseInt(npm_d));
+                    System.out.print("\nMasukkan NIM : ");
+                    String nim_d = in.nextLine();
+                    Mahasiswa mhs_d = service.getMahasiswa(Integer.parseInt(nim_d));
                     if (mhs_d == null) {
-                        System.out.println("Tidak ditemukan mahasiswa dengan NIM "+npm_d);
+                        System.out.println("Tidak ditemukan mahasiswa dengan NIM " + nim_d);
+                        break;
+                    }
+                    System.out.println("Nama Mahasiswa : "+mhs_d.getNama());
+                    System.out.print("Masukkan Kode Mata Kuliah : ");
+                    String kode_mk_d = in.nextLine();
+                    Matkul matkul_d = service.getMatkul(Integer.parseInt(kode_mk_d));
+                    if (matkul_d == null) {
+                        System.out.println("Tidak ditemukan mata kuliah dengan kode mata kuliah " + kode_mk_d);
+                        break;
+                    }
+                    System.out.println("Nama Mata Kuliah : "+matkul_d.getNama_mk());
+                    Nilai nilai_d = service.getNilai(mhs_d.getNim(), matkul_d.getKd_mk());
+                    if (nilai_d == null) {
+                        System.out.println("Tidak ditemukan nilai mata kuliah "+matkul_d.getNama_mk()+" untuk "+mhs_d.getNama());
                         break;
                     }
                     System.out.print("Hapus? (Y/N) : ");
                     String hapus = in.nextLine();
                     if (hapus.toLowerCase().equals("y")) {
-                        service.delete(mhs_d);
+                        service.delete(nilai_d);
                     }
                     break;
                 case 0:
