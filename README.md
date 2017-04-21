@@ -11,5 +11,7 @@ SIAK adalah Sistem Informasi Akademik untuk mengelola nilai mahasiswa. Sistem in
 
 ## Author
 Gugi Gustaman
+
 NPM : 1541811
+
 STMIK AMIKBANDUNG
