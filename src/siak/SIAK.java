@@ -9,6 +9,7 @@ import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
 import java.util.List;
 import java.util.Scanner;
 import model.Mahasiswa;
+import model.Matkul;
 import service.ServiceJdbc;
 
 /**
@@ -47,7 +48,7 @@ public class SIAK {
                     getMenuMahasiswa(service);
                     break;
                 case 2:
-                    getMenuMatkul();
+                    getMenuMatkul(service);
                     break;
                 case 3:
                     getMenuNilai();
@@ -154,8 +155,86 @@ public class SIAK {
         }
     }
     
-    public static void getMenuMatkul() {
-        
+    public static void getMenuMatkul(ServiceJdbc service) {
+        Scanner in = new Scanner(System.in);
+        Boolean active = true;
+        while (active) {
+            System.out.println("\nMenu Pengelolaan Mata Kuliah : \n");
+            System.out.println("1. Lihat Daftar Mata Kuliah");
+            System.out.println("2. Tambah Data Mata Kuliah");
+            System.out.println("3. Ubah Data Mata Kuliah");
+            System.out.println("4. Hapus Data Mata Kuliah");
+            System.out.println("\n0. Kembali ke Menu Utama");
+
+            System.out.print("\nPilihan : ");
+            String pilih = in.nextLine();
+            switch (pilih) {
+                case "1":
+                    List<Matkul> matkulR = service.getAllMatkul();
+                    if (matkulR.isEmpty()) {
+                        System.out.println("\nBelum ada mata kuliah yang terdaftar. Silakan tambahkan mata kuliah terlebih dahulu!");
+                    } else {
+                        System.out.println("\nKode Mata Kuliah\t | Nama Mata Kuliah\t | Jumlah SKS");
+                        System.out.println("--------------------------------------------------------------------------------------");
+                        for (Matkul matkul : matkulR) {
+                            System.out.println(matkul.getKd_mk()+ "\t\t | " + matkul.getNama_mk()+ "\t| " + matkul.getSks());
+                        }
+                    }
+                    break;
+                case "2":
+                    System.out.print("Nama Mata Kuliah : ");
+                    String nama_mk = in.nextLine();
+                    System.out.print("Jumlah SKS : ");
+                    String sks = in.nextLine();
+                    System.out.print("Simpan? (Y/N) : ");
+                    String tambah = in.nextLine();
+                    if (tambah.toLowerCase().equals("y")) {
+                        Matkul buku = new Matkul();
+                        buku.setNama_mk(nama_mk);
+                        buku.setSks(Integer.parseInt(sks));
+                        service.save(buku);
+                    }
+                    break;
+                case "3":
+                    System.out.print("Masukkan ID Mata Kuliah : ");
+                    String id_matkul_x = in.nextLine();
+                    Matkul matkul_x = service.getMatkul(Integer.parseInt(id_matkul_x));
+                    if (matkul_x == null) {
+                        System.out.println("Tidak ditemukan mata kuliah dengan ID " + id_matkul_x);
+                        break;
+                    }
+                    System.out.print("Nama Mata Kuliah : ");
+                    String nama_mk_x = in.nextLine();
+                    System.out.print("Jumlah SKS : ");
+                    String sks_x = in.nextLine();
+                    System.out.print("Simpan? (Y/N) : ");
+                    String ubah_x = in.nextLine();
+                    if (ubah_x.toLowerCase().equals("y")) {
+                        matkul_x.setKd_mk(Integer.parseInt(id_matkul_x));
+                        matkul_x.setNama_mk(nama_mk_x);
+                        matkul_x.setSks(Integer.parseInt(sks_x));
+                        service.save(matkul_x);
+                    }
+                    break;
+                case "4":
+                    System.out.print("Masukkan ID Mata Kuliah : ");
+                    String id_matkul_d = in.nextLine();
+                    Matkul matkul_d = service.getMatkul(Integer.parseInt(id_matkul_d));
+                    if (matkul_d == null) {
+                        System.out.println("Tidak ditemukan mata kuliah dengan ID " + id_matkul_d);
+                        break;
+                    }
+                    System.out.print("Hapus? (Y/N) : ");
+                    String hapus = in.nextLine();
+                    if (hapus.toLowerCase().equals("y")) {
+                        service.delete(matkul_d);
+                    }
+                    break;
+                case "0":
+                    active = false;
+                    break;
+            }
+        }
     }
     
     public static void getMenuNilai() {

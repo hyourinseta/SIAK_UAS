@@ -69,7 +69,7 @@ public class MahasiswaDao {
         return mahasiswa;
     }
     
-    public Mahasiswa getByNpm(int nim) throws SQLException{
+    public Mahasiswa getByNim(int nim) throws SQLException{
         getByIdStatement.setInt(1, nim);
         ResultSet rs = getByIdStatement.executeQuery();
         //proses mapping dari relational ke object
