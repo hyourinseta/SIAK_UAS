@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: Apr 21, 2017 at 06:00 PM
+-- Generation Time: Apr 22, 2017 at 01:14 AM
 -- Server version: 10.1.16-MariaDB
 -- PHP Version: 5.6.24
 
@@ -39,6 +39,7 @@ CREATE TABLE `mahasiswa` (
 --
 
 INSERT INTO `mahasiswa` (`nim`, `nama`, `tgl_lahir`, `alamat`, `no_hp`) VALUES
+(1512312, 'Ujang Uganda', '1988-11-12', 'Uganda', '087728181281'),
 (1541811, 'Gugi Gustaman', '1992-08-27', 'Batas Kota', '087722106360');
 
 -- --------------------------------------------------------
@@ -59,7 +60,8 @@ CREATE TABLE `matakuliah` (
 
 INSERT INTO `matakuliah` (`kode_mk`, `nama_mk`, `sks`) VALUES
 (2, 'Algoritma & Struktur Data II', 3),
-(3, 'Pemrograman Java II', 3);
+(3, 'Pemrograman Java II', 3),
+(4, 'Sistem Operasi', 3);
 
 -- --------------------------------------------------------
 
@@ -72,6 +74,18 @@ CREATE TABLE `nilai` (
   `kode_mk` int(11) NOT NULL,
   `nilai` char(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `nilai`
+--
+
+INSERT INTO `nilai` (`nim`, `kode_mk`, `nilai`) VALUES
+(1541811, 2, 'B'),
+(1541811, 3, 'A'),
+(1512312, 2, 'C'),
+(1512312, 3, 'B'),
+(1541811, 4, 'A'),
+(1512312, 4, 'C');
 
 --
 -- Indexes for dumped tables
@@ -97,7 +111,7 @@ ALTER TABLE `matakuliah`
 -- AUTO_INCREMENT for table `matakuliah`
 --
 ALTER TABLE `matakuliah`
-  MODIFY `kode_mk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `kode_mk` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
