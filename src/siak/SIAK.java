@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Scanner;
 import model.Mahasiswa;
 import model.Matkul;
+import model.Nilai;
 import service.ServiceJdbc;
 
 /**
@@ -40,7 +41,8 @@ public class SIAK {
             System.out.println("\nMenu Utama");
             System.out.println("\n1. Pengelolaan Mahasiswa");
             System.out.println("2. Pengelolaan Mata Kuliah");
-            System.out.println("3. Input Nilai Mahasiswa");
+            System.out.println("3. Pengelolaan Nilai Mahasiswa");
+            System.out.println("\n0. Keluar");
             System.out.print("\nMasukkan pilihan : ");
             String pilihanutama = in.nextLine();
             switch(Integer.parseInt(pilihanutama)) {
@@ -51,13 +53,17 @@ public class SIAK {
                     getMenuMatkul(service);
                     break;
                 case 3:
-                    getMenuNilai();
+                    getMenuNilai(service);
+                    break;
+                case 0:
+                    mainmenu = false;
                     break;
                 default:
                     break;
             }
             
         }
+        System.out.println("\nTerima kasih telah menggunakan Sistem Informasi Akademik");
     }
     
     public static void getMenuMahasiswa(ServiceJdbc service) {
@@ -69,6 +75,7 @@ public class SIAK {
             System.out.println("2. Tambah Data Mahasiswa");
             System.out.println("3. Ubah Data Mahasiswa");
             System.out.println("4. Hapus Data Mahasiswa");
+            System.out.println("\n0. Kembali ke Menu Utama");
             System.out.print("\nMasukkan pilihan : ");
             String pilihanmhs = in.nextLine();
             switch (Integer.parseInt(pilihanmhs)) {
@@ -148,6 +155,8 @@ public class SIAK {
                         service.delete(mhs_d);
                     }
                     break;
+                case 0:
+                    mhsmenu = false;
                 default:
                     break;
             }
@@ -233,12 +242,159 @@ public class SIAK {
                 case "0":
                     active = false;
                     break;
+                default:
+                    break;
             }
         }
     }
     
-    public static void getMenuNilai() {
-        
+    public static void getMenuNilai(ServiceJdbc service) {
+        Boolean nilaimenu = true;
+        Scanner in = new Scanner(System.in);
+        while (nilaimenu) {
+            System.out.println("\nMenu Pengelolaan Nilai");
+            System.out.println("\n1. Lihat Nilai Berdasarkan Mahasiswa");
+            System.out.println("2. Lihat Nilai Berdasarkan Mata Kuliah");
+            System.out.println("3. Input Nilai");
+            System.out.println("4. Ubah Nilai");
+            System.out.println("5. Hapus Nilai");
+            System.out.println("\n0. Kembali ke Menu Utama");
+            System.out.print("\nMasukkan pilihan : ");
+            String pilihanmhs = in.nextLine();
+            switch (Integer.parseInt(pilihanmhs)) {
+                case 1:
+                    System.out.print("\nSilakan masukkan NIM : ");
+                    String nim_x = in.nextLine();
+                    Mahasiswa mhs_x = service.getMahasiswa(Integer.parseInt(nim_x));
+                    if (mhs_x == null) {
+                        System.out.println("\nTidak ada Mahasiswa dengan NIM tersebut!");
+                        break;
+                    }
+                    System.out.println("\nNIM \t\t\t : " + mhs_x.getNim());
+                    System.out.println("Nama Mahasiswa \t : " + mhs_x.getNama());
+                    List<Nilai> nilaiR = service.getAllNilai(Integer.parseInt(nim_x), 0);
+                    System.out.println("\nMata Kuliah \t\t\t | Nilai");
+                    System.out.println("====================================================");
+                    for (Nilai nilai : nilaiR) {
+                        System.out.println(nilai.getNama_mk()+ " \t | "+ nilai.getNilai());
+                    }
+                    break;
+                case 2:
+                    System.out.print("\nSilakan masukkan Kode Mata Kuliah : ");
+                    String kode_mk_x = in.nextLine();
+                    Matkul matkul_x = service.getMatkul(Integer.parseInt(kode_mk_x));
+                    if (matkul_x == null) {
+                        System.out.println("\nTidak ada Mahasiswa dengan NIM tersebut!");
+                        break;
+                    }
+                    System.out.println("\nKode Mata Kuliah \t\t\t : " + matkul_x.getKd_mk());
+                    System.out.println("Nama Mata Kuliah \t : " + matkul_x.getNama_mk());
+                    List<Nilai> nilai_M = service.getAllNilai(0, Integer.parseInt(kode_mk_x));
+                    System.out.println("\nNIM\t | Nama Mahasiswa \t\t | Nilai");
+                    System.out.println("============================================================================");
+                    for (Nilai nilai : nilai_M) {
+                        System.out.println(nilai.getNim() + "\t | " + nilai.getNama_mhs()+ " \t\t | "+ nilai.getNilai());
+                    }
+                    break;
+                case 3:
+                    System.out.print("\nMasukkan NIM : ");
+                    String nim_n = in.nextLine();
+                    Mahasiswa mhs_n = service.getMahasiswa(Integer.parseInt(nim_n));
+                    if (mhs_n == null) {
+                        System.out.println("Tidak ditemukan mahasiswa dengan NIM " + nim_n);
+                        break;
+                    }
+                    System.out.println("Nama Mahasiswa : "+mhs_n.getNama());
+                    System.out.print("Masukkan Kode Mata Kuliah : ");
+                    String kode_mk_n = in.nextLine();
+                    Matkul matkul_n = service.getMatkul(Integer.parseInt(kode_mk_n));
+                    if (matkul_n == null) {
+                        System.out.println("Tidak ditemukan mata kuliah dengan kode mata kuliah " + kode_mk_n);
+                        break;
+                    }
+                    System.out.println("Nama Mata Kuliah : "+matkul_n.getNama_mk());
+                    System.out.print("Nilai : ");                    
+                    String nilai_b = in.nextLine();
+                    System.out.print("Simpan? (Y/N) : ");
+                    String tambah_x = in.nextLine();
+                    if (tambah_x.toLowerCase().equals("y")) {
+                        Nilai nilai_n = new Nilai();
+                        nilai_n.setNim(mhs_n.getNim());
+                        nilai_n.setKode_mk(matkul_n.getKd_mk());
+
+                        if (Integer.parseInt(nilai_b) > 80) {
+                            nilai_n.setNilai("A");
+                        } else if (Integer.parseInt(nilai_b) >= 70) {
+                            nilai_n.setNilai("B");
+                        } else if (Integer.parseInt(nilai_b) >= 60) {
+                            nilai_n.setNilai("C");
+                        } else if (Integer.parseInt(nilai_b) >= 50) {
+                            nilai_n.setNilai("D");
+                        } else {
+                            nilai_n.setNilai("E");
+                        }
+                        service.save(nilai_n);
+                    }
+                    break;
+                case 4:
+                    System.out.print("\nMasukkan NIM : ");
+                    String nim_u = in.nextLine();
+                    Mahasiswa mhs_u = service.getMahasiswa(Integer.parseInt(nim_u));
+                    if (mhs_u == null) {
+                        System.out.println("Tidak ditemukan mahasiswa dengan NIM " + nim_u);
+                        break;
+                    }
+                    System.out.println("Nama Mahasiswa : "+mhs_u.getNama());
+                    System.out.print("Masukkan Kode Mata Kuliah : ");
+                    String kode_mk_u = in.nextLine();
+                    Matkul matkul_u = service.getMatkul(Integer.parseInt(kode_mk_u));
+                    if (matkul_u == null) {
+                        System.out.println("Tidak ditemukan mata kuliah dengan kode mata kuliah " + kode_mk_u);
+                        break;
+                    }
+                    System.out.println("Nama Mata Kuliah : "+matkul_u.getNama_mk());
+                    Nilai nilai_u = service.getNilai(mhs_u.getNim(), matkul_u.getKd_mk());
+                    System.out.print("Nilai : ");                    
+                    String nilai_c = in.nextLine();
+                    System.out.print("Simpan? (Y/N) : ");
+                    String tambah_u = in.nextLine();
+                    if (tambah_u.toLowerCase().equals("y")) {
+                        if (Integer.parseInt(nilai_c) > 80) {
+                            nilai_u.setNilai("A");
+                        } else if (Integer.parseInt(nilai_c) >= 70) {
+                            nilai_u.setNilai("B");
+                        } else if (Integer.parseInt(nilai_c) >= 60) {
+                            nilai_u.setNilai("C");
+                        } else if (Integer.parseInt(nilai_c) >= 50) {
+                            nilai_u.setNilai("D");
+                        } else {
+                            nilai_u.setNilai("E");
+                        }
+                        service.update(nilai_u);
+                    }
+                    break;
+                case 5:
+                    System.out.print("Masukkan NIM : ");
+                    String npm_d = in.nextLine();
+                    Mahasiswa mhs_d = service.getMahasiswa(Integer.parseInt(npm_d));
+                    if (mhs_d == null) {
+                        System.out.println("Tidak ditemukan mahasiswa dengan NIM "+npm_d);
+                        break;
+                    }
+                    System.out.print("Hapus? (Y/N) : ");
+                    String hapus = in.nextLine();
+                    if (hapus.toLowerCase().equals("y")) {
+                        service.delete(mhs_d);
+                    }
+                    break;
+                case 0:
+                    nilaimenu = false;
+                    break;
+                default:
+                    break;
+            }
+
+        }
     }
     
 }
